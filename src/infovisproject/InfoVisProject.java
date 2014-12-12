@@ -5,17 +5,24 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 
 
 public class InfoVisProject extends PApplet {
 	
 	Data data;
 	
-	int w = 800;
-	int h = 600;
+	int w = 1280;
+	int h = 1060;
 	int cx = w/2;
 	int cy = h/2;
 	int r  = 400;
+	
+	CountryPanel cp;
+	int cpWidth = 400;
+	int cpHeight = 1000;
+	float cpX = 0;
+	float cpY = 0;
 	
 	//Arcs de cercle
 	ArrayList<Continent> conts = new ArrayList<Continent>();
@@ -38,9 +45,14 @@ public class InfoVisProject extends PApplet {
 		//Initialize data
 		data = new Data(this);
 		
-		
+		cp = new CountryPanel(this, cpWidth, cpHeight);
 	}
 
+
+	public PFont loadFont() {
+		return loadFont("DejaVuSans-30.vlw");
+	}
+	
 	public void draw()
 	{
 		background(255);
@@ -64,6 +76,9 @@ public class InfoVisProject extends PApplet {
 					mouseInteraction(p);
 		
 		drawMiddle();
+		
+		cp.draw();
+		image(cp, cpX, cpY);
 		
 		conts.clear();
 		
