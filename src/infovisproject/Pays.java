@@ -36,10 +36,6 @@ public class Pays
 		app.arc(cx, cy, r, r, start, stop, app.PIE);
 		
 		app.fill(255);
-		/*app.fill(0);
-		if (stop - start > 5)
-			app.text(population, cx + 10, cy +10);
-		app.fill(255);*/
 	}
 	
 	public boolean mouseInside()
@@ -50,7 +46,7 @@ public class Pays
 	boolean IsPointInsideArc(float pointX, float pointY, float centerX, float centerY, float diameter, float angle1, float angle2)
 	{
 		// Find if the mouse is close enough of center
-		boolean nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2;
+		boolean nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2 && app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) >= r /4;
 		if (!nearCenter)
 			return false; // Quick exit...
 	

@@ -80,6 +80,20 @@ public class Data
 		return tm;
 	}
 	
+	//Renvoie la population d'un continent
+	public float getPopCont(String cont)
+	{
+		float pop = 0;
+		
+		for (TableRow tr : data.rows())
+			if (tr.getString(0).equals(cont) && tr.getFloat(16) > 0)
+				pop += tr.getFloat(16);
+		
+		app.println(pop);
+		
+		return pop;
+	}
+	
 	//Renvoie population mondiale totale
 	public float getPop()
 	{
@@ -88,7 +102,7 @@ public class Data
 		for (TableRow tr : data.rows())
 		{
 			if (tr.getFloat(16)>0)
-			pop += tr.getFloat(16);
+				pop += tr.getFloat(16);
 		}
 		
 		return pop;
