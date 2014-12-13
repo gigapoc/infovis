@@ -89,8 +89,6 @@ public class Data
 			if (tr.getString(0).equals(cont) && tr.getFloat(16) > 0)
 				pop += tr.getFloat(16);
 		
-		app.println(pop);
-		
 		return pop;
 	}
 	

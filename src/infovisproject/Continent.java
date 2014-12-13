@@ -1,6 +1,8 @@
 package infovisproject;
 
+import java.awt.Color;
 import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 public class Continent 
@@ -14,15 +16,8 @@ public class Continent
 	float start, stop;
 	String name;
 	
-	public Continent(PApplet a, String n)
-	{
-		app = a;
-		
-		pays = new ArrayList<Pays>();
-		
-		name = n;
-	}
-	
+	Color color;
+
 	public Continent(PApplet a, String name, int x, int y, int d, float start, float stop, ArrayList<Pays> payss)
 	{
 		app = a;
@@ -36,15 +31,24 @@ public class Continent
 		
 		this.name = name;
 		
+		//Colors
+		color = Colors.getColor(name);
+		
 	}
 	
 	public void draw()
 	{	
-		if (mouseInside())
-			app.fill(0,0,255);
-		
+		app.strokeWeight(1);
 		app.arc(cx, cy, d, d, start, stop, app.PIE);
 		
+		//app.strokeWeight(1);
+		int opacite = Colors.opacite;
+		if (mouseInside())
+			opacite = Colors.opaciteHover;
+		app.fill(color.getRed(), color.getGreen(), color.getBlue(), opacite);
+		app.arc(cx, cy, d*2, d*2, start, stop, app.PIE);
+		app.fill(255);
+		app.strokeWeight(0.2f);
 		app.fill(255);
 	}
 	

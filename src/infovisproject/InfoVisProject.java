@@ -16,7 +16,7 @@ public class InfoVisProject extends PApplet {
 	int h = 1080;
 	int cx = w/2 + 200;
 	int cy = h/2;
-	int r  = h/2 - 100;
+	int r  = h/2 - 50;
 	int rPays = 2*r;
 	int midR = r/2;
 	
@@ -52,7 +52,6 @@ public class InfoVisProject extends PApplet {
 	{
 		size(w, h);
 		smooth();
-		
 		//Initialize data
 		data = new Data(this);
 		
@@ -75,11 +74,10 @@ public class InfoVisProject extends PApplet {
 			for (Continent c : conts)
 			{
 				for (Pays p : c.pays)
-				{
 					p.draw();
-				}
 				c.draw();
 			}
+			
 			drawMiddle();
 			
 			//Mouse interaction
@@ -87,20 +85,24 @@ public class InfoVisProject extends PApplet {
 			{
 				for (Pays p : c.pays)
 					if (p.mouseInside())
+					{
 						mouseInteraction(p);
+					}
 				if (c.mouseInside())
 					mouseInteraction(c);
 			}
-			
 			
 			conts.clear();
 		}
 		else //Vue focus sur un continent
 		{
+			
 			prepareCont();
 			
+			strokeWeight(1);
 			for (Pays p : aCont)
 				p.draw();
+			strokeWeight(0.2f);
 			
 			drawMiddle();
 			
@@ -109,6 +111,9 @@ public class InfoVisProject extends PApplet {
 				if (p.mouseInside())
 					mouseInteraction(p);
 			
+			fill(0);
+			text(selec.name, cx-textWidth(selec.name)/2, cy + 30);
+			fill(255);
 			aCont.clear();
 		}
 		
@@ -122,7 +127,10 @@ public class InfoVisProject extends PApplet {
 ///////////////SECTION MIDDLE
 	public void drawMiddle()
 	{
+		//Middle
+		strokeWeight(1);
 		ellipse(cx, cy, midR, midR);
+		strokeWeight(0.2f);
 	}
 	
 	
@@ -156,7 +164,7 @@ public class InfoVisProject extends PApplet {
 			if (p.getValue() > 0)
 			{
 				degPays = p.getValue() * rat;
-				Pays a = new Pays (this, cx, cy, r, degCurr, degCurr + degPays, selec.name, p.getKey(), p.getValue());
+				Pays a = new Pays (this, cx, cy, rPays, degCurr, degCurr + degPays, selec.name, p.getKey(), p.getValue(), false);
 				aCont.add(a);
 				degCurr += degPays;		
 			}
@@ -186,7 +194,7 @@ public class InfoVisProject extends PApplet {
 				if (p.getValue() > 0)
 				{
 					degPays = p.getValue() * rat;
-					Pays a = new Pays(this, cx, cy, rPays, degCurr, degCurr+degPays, e.getKey(), p.getKey(), p.getValue());
+					Pays a = new Pays(this, cx, cy, rPays, degCurr, degCurr+degPays, e.getKey(), p.getKey(), p.getValue(), true);
 					arcs.add(a);
 					degCurr += degPays;
 					degCont += degPays;
@@ -209,19 +217,17 @@ public class InfoVisProject extends PApplet {
 /////////////// SECTION INTERACTION
 	public void mouseInteraction(Pays a)
 	{
-		fill(0,255,0);
-		rect(mouseX+10, mouseY+10, textWidth(a.pays) + 20, 50, 10);
 		fill(0);
-		text(a.pays, mouseX+20, mouseY+22);
+		text(a.pays, cx-textWidth(a.pays)/2, cy);
+		if (selec == null)
+			text(a.continent, cx-textWidth(a.continent)/2, cy + 30);
 		fill(255);
 	}
 	
 	public void mouseInteraction(Continent c)
 	{
-		fill(0,255,0);
-		rect(mouseX+10, mouseY+10, textWidth(c.name) + 20, 50, 10);
 		fill(0);
-		text(c.name, mouseX+20, mouseY+22);
+		text(c.name, cx-textWidth(c.name)/2, cy);
 		fill(255);
 		
 		if (mousePressed)

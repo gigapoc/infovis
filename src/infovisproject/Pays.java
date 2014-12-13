@@ -13,7 +13,9 @@ public class Pays
 	String continent, pays;
 	float population;
 	
-	public Pays (PApplet a, int x, int y, int r1, float sta, float sto, String cont, String p, float po)
+	boolean mode;
+	
+	public Pays (PApplet a, int x, int y, int r1, float sta, float sto, String cont, String p, float po, boolean mode)
 	{
 		app = a;
 		
@@ -26,15 +28,14 @@ public class Pays
 		continent = cont;
 		pays = p;
 		population = po;
+		
+		this.mode = mode;
 	}
 	
 	public void draw()
 	{
 		app.stroke(0);
-		if (mouseInside())
-			app.fill(255,0,0);
 		app.arc(cx, cy, r, r, start, stop, app.PIE);
-		
 		app.fill(255);
 	}
 	
@@ -46,7 +47,12 @@ public class Pays
 	boolean IsPointInsideArc(float pointX, float pointY, float centerX, float centerY, float diameter, float angle1, float angle2)
 	{
 		// Find if the mouse is close enough of center
-		boolean nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2 && app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) >= r /4;
+		boolean nearCenter;
+		
+		if (mode)
+			nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2 && app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) >= r /4;
+		else
+			nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2;
 		if (!nearCenter)
 			return false; // Quick exit...
 	
