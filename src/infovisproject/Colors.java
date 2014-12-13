@@ -5,9 +5,9 @@ import java.awt.Color;
 public class Colors 
 {
 	//Jaune (Asie)
-	static Color j = new Color(223, 252, 6);
+	static Color j = new Color(255, 239, 8);
 	//Bleu (Europe)
-	static Color b = new Color(7,192,217);
+	static Color b = new Color(0,41,140);
 	//Noir (Afrique)
 	static Color n = new Color(0,0,0);
 	//Rouge (N. Amé.)
@@ -30,7 +30,7 @@ public class Colors
 			return n;
 		else if (cont.equals("oceania"))
 			return v;
-		else if (cont.contains("north"))
+		else if (cont.contains("america"))
 			return r;
 		else
 			return o;

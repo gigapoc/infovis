@@ -2,6 +2,7 @@ package infovisproject;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import processing.core.PApplet;
 
@@ -39,6 +40,7 @@ public class Continent
 	public void draw()
 	{	
 		app.strokeWeight(1);
+		app.stroke(0);
 		app.arc(cx, cy, d, d, start, stop, app.PIE);
 		
 		//app.strokeWeight(1);
@@ -57,6 +59,32 @@ public class Continent
 		pays.add(p);
 	}
 	
+	
+	public void sortByPop()
+	{
+		ArrayList<Pays> newList = new ArrayList<Pays>();
+		ArrayList<Float> sorted = new ArrayList<Float>();
+		
+		for (Pays p : pays)
+		{
+			sorted.add(p.population);
+		}
+		Collections.sort(sorted);
+		
+		for (Float f : sorted)
+		{
+			for (Pays p : pays)
+				if (p.population == f)
+				{
+					newList.add(p);
+					break;
+				}
+		}
+		pays.clear();
+		pays = newList;
+	}
+	
+	
 	public void setStart(float s) { start = s; }
 	public void setStop(float s) { stop = s; }
 	
@@ -68,7 +96,8 @@ public class Continent
 	boolean IsPointInsideArc(float pointX, float pointY, float centerX, float centerY, float diameter, float angle1, float angle2)
 	{
 		// Find if the mouse is close enough of center
-		boolean nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= diameter /2 && app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) >= diameter /4;
+		float dist = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY));
+		boolean nearCenter = dist <= diameter /2 && dist >= diameter /4;
 		if (!nearCenter)
 			return false; // Quick exit...
 	

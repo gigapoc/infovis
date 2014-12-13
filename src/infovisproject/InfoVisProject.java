@@ -22,24 +22,14 @@ public class InfoVisProject extends PApplet {
 	
 	//Arcs de cercle
 	ArrayList<Continent> conts = new ArrayList<Continent>();
-	ArrayList<Pays> aCont = new ArrayList<Pays>();
+	TreeMap<Float, Pays> aCont = new TreeMap<Float, Pays>();
 	
 	
 	//Selection continent
 	Continent selec = null;
 	
-	//Animation TODO
-	//boolean animReduceCont = false;
-	
-	/*
-	 * Couleurs :
-	 * 	- asia : jaune (100-220, 100-220, 58)
-	 *  - europe : bleu  (45, 65, 100-220)
-	 *  - AM. N. : rouge (100-220, 58, 58)
-	 *  - AM. S. : orange (200-255, 148, 59)
-	 *  - Afrique : noir (gray scale)
-	 *  - Océanie : vert (47, 100-220, 47)
-	 */
+	//Animation
+	int degCurr = 0;
 	
 	//Panel
 	CountryPanel cp;
@@ -68,7 +58,7 @@ public class InfoVisProject extends PApplet {
 		
 		if (selec == null) //Si on est en vue générale
 		{
-			prepareCountries();
+			prepareCountries(degCurr);
 			
 			//Draw
 			for (Continent c : conts)
@@ -93,28 +83,35 @@ public class InfoVisProject extends PApplet {
 			}
 			
 			conts.clear();
+			
+			if (degCurr < 360)
+				degCurr+= 30;
 		}
 		else //Vue focus sur un continent
 		{
-			
-			prepareCont();
+
+			prepareCont(degCurr);
 			
 			strokeWeight(1);
-			for (Pays p : aCont)
-				p.draw();
+			for (Entry<Float, Pays> p : aCont.entrySet())
+				p.getValue().draw();
 			strokeWeight(0.2f);
 			
 			drawMiddle();
-			
+				
 			//Mouse interaction
-			for (Pays p : aCont)
-				if (p.mouseInside())
-					mouseInteraction(p);
+			for (Entry<Float, Pays> p : aCont.entrySet())
+				if (p.getValue().mouseInside())
+					mouseInteraction(p.getValue());
 			
 			fill(0);
 			text(selec.name, cx-textWidth(selec.name)/2, cy + 30);
 			fill(255);
 			aCont.clear();
+			
+			if (degCurr < 360)
+				degCurr+= 30;
+			
 		}
 		
 		interactionMiddle();
@@ -142,16 +139,17 @@ public class InfoVisProject extends PApplet {
 			if (isPointInsideCircle(mouseX, mouseY, cx, cy, midR) && mousePressed)
 			{
 				selec = null;
+				degCurr = 0;
 			}
 		}
  	}
 /////////////// FIN SECTION MIDDLE
 	
 /////////////// SECTION VUE CONTINENT
-	public void prepareCont()
+	public void prepareCont(int deg)
 	{
 		//Ratio
-		float rat = 360 / data.getPopCont(selec.name);
+		float rat = deg / data.getPopCont(selec.name);
 		float degCurr = 0;
 		float degPays = 0;
 		
@@ -165,21 +163,21 @@ public class InfoVisProject extends PApplet {
 			{
 				degPays = p.getValue() * rat;
 				Pays a = new Pays (this, cx, cy, rPays, degCurr, degCurr + degPays, selec.name, p.getKey(), p.getValue(), false);
-				aCont.add(a);
-				degCurr += degPays;		
+				aCont.put(p.getValue(), a);
+				degCurr += degPays;
 			}
 		}
+		
 	}
 /////////////// FIN SECTION VUE CONTINENT
 	
-	
 /////////////// SECTION VUE GLOABALE
-	public void prepareCountries()
+	public void prepareCountries(int deg)
 	{
 		ArrayList<Pays> arcs = new ArrayList<Pays>();
 		
 		//Ratio :
-		float rat = 360/data.getPop();
+		float rat = deg/data.getPop();
 		float degCurr = 0;
 		float degPays = 0;
 		float degCurrCont = 0;
@@ -202,7 +200,7 @@ public class InfoVisProject extends PApplet {
 			}
 			
 			Continent c = new Continent(this, e.getKey(), cx, cy, r, degCurrCont, degCurrCont + degCont, arcs);
-					
+			c.sortByPop();
 			conts.add(c);
 			
 			degCurrCont += degCont;
@@ -231,7 +229,10 @@ public class InfoVisProject extends PApplet {
 		fill(255);
 		
 		if (mousePressed)
+		{
 			selec = c;
+			degCurr = 0;
+		}
 	}
 /////////////// FIN SECTION INTERACTION
 	

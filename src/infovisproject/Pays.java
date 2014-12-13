@@ -1,5 +1,7 @@
 package infovisproject;
 
+import java.awt.Color;
+
 import processing.core.PApplet;
 
 public class Pays 
@@ -14,6 +16,8 @@ public class Pays
 	float population;
 	
 	boolean mode;
+	
+	Color color;
 	
 	public Pays (PApplet a, int x, int y, int r1, float sta, float sto, String cont, String p, float po, boolean mode)
 	{
@@ -30,12 +34,17 @@ public class Pays
 		population = po;
 		
 		this.mode = mode;
+		
+		color = Colors.getColor(continent);
 	}
 	
 	public void draw()
 	{
-		app.stroke(0);
+		app.stroke(255);
+		app.strokeWeight(1f);
+		app.fill(color.getRed(), color.getGreen(), color.getBlue(), 200);
 		app.arc(cx, cy, r, r, start, stop, app.PIE);
+		app.fill(255);
 		app.fill(255);
 	}
 	
@@ -48,11 +57,12 @@ public class Pays
 	{
 		// Find if the mouse is close enough of center
 		boolean nearCenter;
+		float dist = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY));
 		
 		if (mode)
-			nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2 && app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) >= r /4;
+			nearCenter = dist <= r /2 && dist >= r /4;
 		else
-			nearCenter = app.sqrt(app.sq(pointX - centerX) + app.sq(pointY - centerY)) <= r /2;
+			nearCenter = dist <= r /2 && dist >= r/8;
 		if (!nearCenter)
 			return false; // Quick exit...
 	

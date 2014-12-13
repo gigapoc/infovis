@@ -1,6 +1,12 @@
 package infovisproject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.TreeMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import processing.core.PApplet;
@@ -26,7 +32,6 @@ public class Data
 		app = p;
 		
 		data = app.loadTable("countries.csv", "header");
-		
 	}
 	
 	public ArrayList<String> getContinents()
@@ -78,6 +83,21 @@ public class Data
 		}
 		
 		return tm;
+	}
+	
+	//Renvoie le nb de continents
+	public int nbConts()
+	{
+		int nb = 1; String lastCont = data.getRow(0).getString(0);
+		for (TableRow tr : data.rows())
+		{
+			if (!tr.getString(0).equals(lastCont))
+			{
+				nb++;
+				lastCont = tr.getString(0);
+			}
+		}
+		return nb;
 	}
 	
 	//Renvoie la population d'un continent
