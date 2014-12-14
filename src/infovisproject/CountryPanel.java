@@ -1,5 +1,9 @@
 package infovisproject;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import processing.core.PFont;
 import processing.core.PGraphicsJava2D;
 
@@ -16,8 +20,9 @@ public class CountryPanel extends PGraphicsJava2D {
 									 {255, 0, 255} };
 	
 	
-	int width, height, graphWidth, graphHeight;
-	int informationNb = 4;
+	String nameToDisplay;
+	int width, height, graphWidth;
+	int informationNb = 6;
 	
 	WebGraph cg;
 	InformationPanel ip;
@@ -35,19 +40,15 @@ public class CountryPanel extends PGraphicsJava2D {
 		stroke(2);
 
 		graphWidth = (5*width)/6;
-		graphHeight = (5*width)/6;
-		cg = new WebGraph(this, graphWidth, graphHeight, informationNb);
-		ip = new InformationPanel(this, graphWidth, height - (graphHeight+60), informationNb);
-	}
-	
-	public void setup() {
-		background(255);
+		cg = new WebGraph(this, graphWidth, informationNb);
+		ip = new InformationPanel(this, graphWidth, height - (graphWidth+60), informationNb);
 	}
 	
 	public void draw() {
 		// backgrounds elements
 		beginDraw();
 		background(200);
+		
 		stroke(0);
 		strokeWeight(2);
 		line(width, 0, width, height);
@@ -56,7 +57,12 @@ public class CountryPanel extends PGraphicsJava2D {
 		image(cg, width/12, 20);
 		
 		ip.draw();
-		image(ip, width/12, graphHeight + 20);
+		image(ip, width/12, graphWidth + 40);
+		
+		if(nameToDisplay != null) {
+			textFont(mainPanel.loadFont("LiberationSerif-40.vlw"));
+			text(nameToDisplay, 0, 30);
+		}
 		
 		endDraw();
 	}
@@ -65,4 +71,18 @@ public class CountryPanel extends PGraphicsJava2D {
 		return mainPanel.loadFont();
 	}
 	
+	// update to the new information given
+	public void update(String continent, String country, Data data, LinkedHashMap<String, Float> caracteristics) {
+		nameToDisplay = country;
+		
+		int branchIndex = 0;
+		for(Map.Entry<String, Float> entry: caracteristics.entrySet()) {
+			cg.setMax(branchIndex, data.getMaxColumn(continent, entry.getKey()));
+			cg.setMin(branchIndex, data.getMinColumn(continent, entry.getKey()));
+			branchIndex++;
+		}
+		
+		cg.update(caracteristics);
+		ip.update(caracteristics);
+	}
 }

@@ -1,40 +1,51 @@
 package infovisproject;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
+import processing.data.TableRow;
 
 public class WebGraph extends PGraphicsJava2D {
 
 	PGraphics parent;
 	
 	int width;
-	int height;
 	
 	int branchNumber;
 	
 	Triangle[] triangles;
 	
-	public WebGraph(PGraphics parent, int width, int height, int branchNumber) {
+	// maximum value of the i branch
+	float[] max;
+	float[] min;
+	LinkedHashMap<String, Float> data;
+	
+	public WebGraph(PGraphics parent, int width, int branchNumber) {
 		this.parent = parent;
 		this.width = width;
-		this.height = height;
 		this.branchNumber = (branchNumber<3)?3:branchNumber;
 		this.triangles = new Triangle[branchNumber];
+		this.max = new float[branchNumber];
+		this.min = new float[branchNumber];
 		
 		// to remove, for debuging purpose	
-		addTriangle(0, 0, -100, (float) Math.cos(PI/6)*55, (float) Math.sin(PI/6)*55, CountryPanel.colors[0], CountryPanel.colors[1]);
+		/*addTriangle(0, 0, -100, (float) Math.cos(PI/6)*55, (float) Math.sin(PI/6)*55, CountryPanel.colors[0], CountryPanel.colors[1]);
 		addTriangle(1, (float) Math.cos(PI/6)*55, (float) Math.sin(PI/6)*55, (float) Math.cos(5*PI/6)*120, (float) Math.sin(5*PI/6)*120, CountryPanel.colors[1], CountryPanel.colors[2]);
-		addTriangle(2, (float) Math.cos(5*PI/6)*120, (float) Math.sin(5*PI/6)*120, 0, -100, CountryPanel.colors[2], CountryPanel.colors[0]);
+		addTriangle(2, (float) Math.cos(5*PI/6)*120, (float) Math.sin(5*PI/6)*120, 0, -100, CountryPanel.colors[2], CountryPanel.colors[0]);*/
 		
-		setSize(width, height);
+		setSize(width, width);
 	}
 	
 	public void drawBackgroundLines() {
 		pushMatrix();
 		float radius = width/2;
 		
-		strokeWeight(1);
-		stroke(200);
+		strokeWeight(0.1f);
+		stroke(150);
 		rotate(-PI/2);
 		for(int index = 0; index < 5; index++) {
 			float x = (radius/5) * (index + 1);
@@ -53,7 +64,7 @@ public class WebGraph extends PGraphicsJava2D {
 	}
 	
 	public void drawBranches() {
-		strokeWeight(4);
+		strokeWeight(2);
 		pushMatrix();
 		for(int branchIndex = 0; branchIndex < branchNumber; branchIndex++) {
 			stroke(CountryPanel.colors[branchIndex][0], CountryPanel.colors[branchIndex][1], CountryPanel.colors[branchIndex][2]);
@@ -76,7 +87,7 @@ public class WebGraph extends PGraphicsJava2D {
 	
 	public void draw() {
 		beginDraw();
-		background(150);
+		background(200);
 		/*stroke(0);
 		ellipse(width/2, height/2, width, height);*/
 		
@@ -87,9 +98,71 @@ public class WebGraph extends PGraphicsJava2D {
 		
 		drawBranches();
 		
+		if(data != null) { showInformation(); }
+		
 		drawTriangles();
 		
 		endDraw();
+	}
+	
+	public void update(LinkedHashMap<String, Float> data) {
+		this.data = data;
+	}
+	
+	public void showInformation() {
+		int iterationCount = 0;
+
+		// initialization in the first iteration
+		float init_x = 0;
+		float init_y = 0;
+		float x1 = 0;
+		float y1 = 0;
+		
+		float x2, y2;
+		
+		double angle = (2*PI)/branchNumber;
+		
+		for(Float value: data.values()) {
+			x2 = (float)(Math.cos(angle*iterationCount - PI/2)) * value;
+			y2 = (float)(Math.sin(angle*iterationCount - PI/2)) * value;
+			
+			x2 = PApplet.map(x2, min[iterationCount], max[iterationCount], 0f, height/2f);
+			y2 = PApplet.map(y2, min[iterationCount], max[iterationCount], 0f, height/2f);
+			
+			if(iterationCount > 0) {
+				/*System.out.println("Iteration n°"+iterationCount+" :");
+				System.out.println("(x1, y1) = (" + x1 + "," + y1 + ")");
+				System.out.println("(x2, y2) = (" + x2 + "," + y2 + ")");*/
+				addTriangle(iterationCount-1, x1, y1, x2, y2, CountryPanel.colors[iterationCount-1], CountryPanel.colors[iterationCount]);
+			} else { 
+				init_x = x2;
+				init_y = y2;
+			}
+			iterationCount++;
+			
+			x1 = x2;
+			y1 = y2;
+		}
+		
+		/*System.out.println("Iteration n°3 :");
+		System.out.println("(x1, y1) = (" + x1 + "," + y1 + ")");
+		System.out.println("(x2, y2) = (" + init_x + "," + init_y + ")");*/
+		addTriangle(branchNumber-1, x1, y1, init_x, init_y, CountryPanel.colors[branchNumber-1], CountryPanel.colors[0]);
+		
+		fill(255);
+	}
+	
+	
+	// set the max value of a given branch index
+	public void setMax(int branchIndex, float max) {
+		//System.out.println("Max" +branchIndex + " = " +max);
+		this.max[branchIndex] = max;
+	}
+	
+	// set the min value of a given branch index
+	public void setMin(int branchIndex, float min) {
+		//System.out.println("Min" +branchIndex + " = " +min);
+		this.min[branchIndex] = min;
 	}
 	
 	

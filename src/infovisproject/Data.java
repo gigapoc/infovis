@@ -2,6 +2,7 @@ package infovisproject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -141,4 +142,35 @@ public class Data
 		return pop;
 	}
 	
+	// retourne la valeur maximum dans une colonne pour un continent donné
+	public float getMaxColumn(String continent, String column) {
+		float max = Float.MIN_VALUE;
+		for(TableRow row : data.findRows(continent, "Continent")) {
+			max = Math.max(max, row.getFloat(column));
+		}
+		return max;
+	}
+	
+	// retourne la valeur minimum dans une colonne pour un continent donné
+	public float getMinColumn(String continent, String column) {
+		float min = Float.MAX_VALUE;
+		for(TableRow row : data.findRows(continent, "Continent")) {
+			min = Math.min(min, row.getFloat(column));
+		}
+		return min;
+	}
+	
+	// récupère toutes les valeurs des colonnes apparaissant dans InfoVisProject.infoToDisplay
+	public LinkedHashMap<String, Float> getCaracteristics(String country) {
+		TableRow row = data.findRow(country, "Country");
+		
+		LinkedHashMap<String, Float> caracteristics = new LinkedHashMap<String, Float>();
+		 
+		String[] columns = InfoVisProject.infoToDisplay;
+		for(String column: columns) {
+			caracteristics.put(column, row.getFloat(column));
+		}
+		
+		return caracteristics;
+	}
 }

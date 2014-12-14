@@ -11,6 +11,13 @@ import processing.data.TableRow;
 
 public class InfoVisProject extends PApplet {
 	
+	public static final String[] infoToDisplay = { "Population Total2007", 
+		  										   "Population Density2007", 
+												   "Life E-1pectancy2007", 
+												   "Energy Use Total2007", 
+												   "Murders Total Deaths2007", 
+												   "GDP Total2007" };
+	
 	Data data;
 	
 	int w = 1920;
@@ -50,7 +57,7 @@ public class InfoVisProject extends PApplet {
 	}
 	
 	public PFont loadFont() {
-		return loadFont("DejaVuSans-30.vlw");
+		return loadFont("DejaVuSans-20.vlw");
 	}
 
 	public void draw()
@@ -84,6 +91,20 @@ public class InfoVisProject extends PApplet {
 			}
 			
 			conts.clear();
+			
+
+			// testing purpose
+			/*int countryNb = 50;
+			java.util.LinkedHashMap<String, Float> data = new java.util.LinkedHashMap<String, Float>();
+			Table table = this.data.data;
+			String[] columnNames = { "Population Total2007", "Population Density2007", "Life E-1pectancy2007", "Energy Use Total2007", "Murders Total Deaths2007", "GDP Total2007" }; 
+			for(int index = 0; index < columnNames.length; index++) {
+				data.put(columnNames[index], table.getFloat(countryNb, columnNames[index]));
+			}
+			
+			cp.update(table.getString(countryNb, "Continent"), table.getString(countryNb, "Country"), this.data, data);
+			// end of test
+			*/
 			
 			if (degCurr < 360)
 				degCurr+= 40;
@@ -227,6 +248,12 @@ public class InfoVisProject extends PApplet {
 		text(a.pays, cx-textWidth(a.pays)/2, cy);
 		if (selec == null)
 			text(a.continent, cx-textWidth(a.continent)/2, cy + 30);
+		
+		// show country details on countryPanel
+		if(mousePressed) {
+			cp.update(a.continent, a.pays, data, data.getCaracteristics(a.pays)); 
+		}
+		
 		fill(255);
 	}
 	
