@@ -1,12 +1,8 @@
 package infovisproject;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.TreeMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import processing.core.PApplet;
@@ -25,6 +21,8 @@ public class Data
 	 * 0 : continent     1 : country      16 : Population Total         (?? mapper 14 : Population Density  par teintes différentes des couleurs par continents ?? )
 	 * 
 	 */
+	HashMap<String, Table> contsPays = new HashMap<String, Table>();
+	
 	PApplet app;
 	
 	public Data(PApplet p)
@@ -32,6 +30,23 @@ public class Data
 		app = p;
 		
 		data = app.loadTable("countries.csv", "header");
+		
+		ArrayList<String> nomConts = new ArrayList<String>();
+		
+		for (TableRow tr : data.rows())
+		{
+			if(!nomConts.contains(tr.getString(0)))
+			{
+				contsPays.put(tr.getString(0), new Table());
+				
+				for (TableRow tr2 : data.findRows(tr.getString(0), 0))
+				{
+					contsPays.get(tr.getString(0)).addRow(tr2);
+				}
+				nomConts.add(tr.getString(0));
+			}
+		}
+		//data.clearRows();
 	}
 	
 	public ArrayList<String> getContinents()

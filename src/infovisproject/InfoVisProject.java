@@ -2,10 +2,11 @@ package infovisproject;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.data.Table;
+import processing.data.TableRow;
 
 
 public class InfoVisProject extends PApplet {
@@ -22,7 +23,7 @@ public class InfoVisProject extends PApplet {
 	
 	//Arcs de cercle
 	ArrayList<Continent> conts = new ArrayList<Continent>();
-	TreeMap<Float, Pays> aCont = new TreeMap<Float, Pays>();
+	ArrayList<Pays> aCont = new ArrayList<Pays>();
 	
 	
 	//Selection continent
@@ -85,7 +86,7 @@ public class InfoVisProject extends PApplet {
 			conts.clear();
 			
 			if (degCurr < 360)
-				degCurr+= 30;
+				degCurr+= 40;
 		}
 		else //Vue focus sur un continent
 		{
@@ -93,16 +94,16 @@ public class InfoVisProject extends PApplet {
 			prepareCont(degCurr);
 			
 			strokeWeight(1);
-			for (Entry<Float, Pays> p : aCont.entrySet())
-				p.getValue().draw();
+			for (Pays p : aCont)
+				p.draw();
 			strokeWeight(0.2f);
 			
 			drawMiddle();
 				
 			//Mouse interaction
-			for (Entry<Float, Pays> p : aCont.entrySet())
-				if (p.getValue().mouseInside())
-					mouseInteraction(p.getValue());
+			for (Pays p : aCont)
+				if (p.mouseInside())
+					mouseInteraction(p);
 			
 			fill(0);
 			text(selec.name, cx-textWidth(selec.name)/2, cy + 30);
@@ -155,15 +156,19 @@ public class InfoVisProject extends PApplet {
 		
 		strokeWeight(0.2f);
 		
-		TreeMap<String, Float> continent = data.getContsCountries().get(selec.name);
+		Table cont = data.contsPays.get(selec.name);;
+		float pop = 0;
+		cont.sort(16);
 		
-		for (Entry<String, Float> p : continent.entrySet())
+		for (TableRow tr : cont.rows())
 		{
-			if (p.getValue() > 0)
+			pop = tr.getFloat(16);
+			println(tr.getString(1) + " : " + pop);
+			if (pop > 0)
 			{
-				degPays = p.getValue() * rat;
-				Pays a = new Pays (this, cx, cy, rPays, degCurr, degCurr + degPays, selec.name, p.getKey(), p.getValue(), false);
-				aCont.put(p.getValue(), a);
+				degPays = pop * rat;
+				Pays a = new Pays (this, cx, cy, rPays, degCurr, degCurr + degPays, selec.name, tr.getString(1), pop, false);
+				aCont.add(a);
 				degCurr += degPays;
 			}
 		}
@@ -185,27 +190,30 @@ public class InfoVisProject extends PApplet {
 		
 		strokeWeight(0.2f);
 		
-		for (Entry<String, TreeMap<String, Float>> e : data.getContsCountries().entrySet())
+		float pop = 0;
+		
+		for (Entry<String, Table> e : data.contsPays.entrySet())
 		{
-			for (Entry<String, Float> p : e.getValue().entrySet())
+			for (TableRow tr : e.getValue().rows())
 			{
-				if (p.getValue() > 0)
+				pop = tr.getFloat(16);
+				if (pop > 0)
 				{
-					degPays = p.getValue() * rat;
-					Pays a = new Pays(this, cx, cy, rPays, degCurr, degCurr+degPays, e.getKey(), p.getKey(), p.getValue(), true);
+					degPays = pop * rat;
+					Pays a = new Pays(this, cx, cy, rPays, degCurr, degCurr+degPays, e.getKey(), tr.getString(1), pop, true);
 					arcs.add(a);
 					degCurr += degPays;
 					degCont += degPays;
 				}
 			}
-			
 			Continent c = new Continent(this, e.getKey(), cx, cy, r, degCurrCont, degCurrCont + degCont, arcs);
-			c.sortByPop();
+			//c.sortByPop();
 			conts.add(c);
 			
 			degCurrCont += degCont;
 			degCont = 0;
 			arcs.clear();
+			
 		}
 		
 	}
