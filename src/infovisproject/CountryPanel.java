@@ -1,6 +1,5 @@
 package infovisproject;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,16 +12,15 @@ public class CountryPanel extends PGraphicsJava2D {
 	InfoVisProject mainPanel;
 	
 	public static final int[][] colors = { {255, 0, 0}, 
-									 {0, 255, 0}, 
-									 {0, 0, 255},
-									 {255, 255, 0},
-									 {0, 255, 255},
-									 {255, 0, 255} };
+										   {0, 255, 0}, 
+										   {0, 0, 255},
+										   {255, 255, 0},
+										   {0, 255, 255},
+										   {255, 0, 255} };
 	
 	
 	String nameToDisplay;
 	int width, height, graphWidth;
-	int informationNb = 6;
 	
 	WebGraph cg;
 	InformationPanel ip;
@@ -40,8 +38,8 @@ public class CountryPanel extends PGraphicsJava2D {
 		stroke(2);
 
 		graphWidth = (5*width)/6;
-		cg = new WebGraph(this, graphWidth, informationNb);
-		ip = new InformationPanel(this, graphWidth, height - (graphWidth+60), informationNb);
+		cg = new WebGraph(this, graphWidth, InfoVisProject.infoToDisplay.length);
+		ip = new InformationPanel(this, graphWidth, height - (graphWidth+60), InfoVisProject.infoToDisplay.length);
 	}
 	
 	public void draw() {
@@ -77,8 +75,8 @@ public class CountryPanel extends PGraphicsJava2D {
 		
 		int branchIndex = 0;
 		for(Map.Entry<String, Float> entry: caracteristics.entrySet()) {
-			cg.setMax(branchIndex, data.getMaxColumn(continent, entry.getKey()));
 			cg.setMin(branchIndex, data.getMinColumn(continent, entry.getKey()));
+			cg.setMax(branchIndex, data.getMaxColumn(continent, entry.getKey()));
 			branchIndex++;
 		}
 		

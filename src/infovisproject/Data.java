@@ -146,7 +146,10 @@ public class Data
 	public float getMaxColumn(String continent, String column) {
 		float max = Float.MIN_VALUE;
 		for(TableRow row : data.findRows(continent, "Continent")) {
-			max = Math.max(max, row.getFloat(column));
+			float value = row.getFloat(column);
+			if(!Float.isNaN(value)) {
+				max = Math.max(max, value);
+			}
 		}
 		return max;
 	}
@@ -155,7 +158,10 @@ public class Data
 	public float getMinColumn(String continent, String column) {
 		float min = Float.MAX_VALUE;
 		for(TableRow row : data.findRows(continent, "Continent")) {
-			min = Math.min(min, row.getFloat(column));
+			float value = row.getFloat(column);
+			if(!Float.isNaN(value)) {
+				min = Math.min(min, value);
+			}
 		}
 		return min;
 	}

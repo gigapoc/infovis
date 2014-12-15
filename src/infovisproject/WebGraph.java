@@ -1,13 +1,11 @@
 package infovisproject;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
-import processing.data.TableRow;
 
 public class WebGraph extends PGraphicsJava2D {
 
@@ -120,28 +118,46 @@ public class WebGraph extends PGraphicsJava2D {
 		
 		float x2, y2;
 		
+		int[] color1 = CountryPanel.colors[0];
+		int[] color2 = CountryPanel.colors[1];
+		
+		boolean noLastValue = false;
 		double angle = (2*PI)/branchNumber;
 		
-		for(Float value: data.values()) {
-			x2 = (float)(Math.cos(angle*iterationCount - PI/2)) * value;
-			y2 = (float)(Math.sin(angle*iterationCount - PI/2)) * value;
+		for(Map.Entry<String, Float> entry: data.entrySet()) {
+			float value = entry.getValue();
 			
-			x2 = PApplet.map(x2, min[iterationCount], max[iterationCount], 0f, height/2f);
-			y2 = PApplet.map(y2, min[iterationCount], max[iterationCount], 0f, height/2f);
+			// draw a one-color line if no last value
+			if(noLastValue) {
+				color1 = color2;
+				noLastValue = false;
+			} 
+			
+			// draw a one line color to the center of the graph
+			if(Float.isNaN(value)) {
+				x2 = 0; y2 = 0;
+				color2 = color1;
+				noLastValue = true;
+			} else {
+				float mapping = PApplet.map(value, min[iterationCount], max[iterationCount], 0f, height/2f);
+				
+				x2 = (float)(Math.cos(angle*iterationCount - PI/2)) * mapping;
+				y2 = (float)(Math.sin(angle*iterationCount - PI/2)) * mapping;
+			}
 			
 			if(iterationCount > 0) {
 				/*System.out.println("Iteration n°"+iterationCount+" :");
 				System.out.println("(x1, y1) = (" + x1 + "," + y1 + ")");
 				System.out.println("(x2, y2) = (" + x2 + "," + y2 + ")");*/
-				addTriangle(iterationCount-1, x1, y1, x2, y2, CountryPanel.colors[iterationCount-1], CountryPanel.colors[iterationCount]);
+				addTriangle(iterationCount-1, x1, y1, x2, y2, color1, color2);
+				color1 = color2; color2 = CountryPanel.colors[(iterationCount+1)%branchNumber];
 			} else { 
 				init_x = x2;
 				init_y = y2;
 			}
 			iterationCount++;
 			
-			x1 = x2;
-			y1 = y2;
+			x1 = x2; y1 = y2;
 		}
 		
 		/*System.out.println("Iteration n°3 :");
@@ -176,14 +192,6 @@ public class WebGraph extends PGraphicsJava2D {
 			this.x2 = x2; this.y2 = y2;
 			this.color1 = color1;
 			this.color2 = color2;
-		}
-		
-		public void moveFirstPoint(float x1, float y1) {
-			this.x1 = x1; this.y1 = y1;
-		}
-		
-		public void moveSecondPoint(float x2, float y2) {
-			this.x2 = x2; this.y2 = y2;
 		}
 		
 		public void draw() {

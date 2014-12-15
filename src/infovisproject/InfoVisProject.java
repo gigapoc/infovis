@@ -11,12 +11,12 @@ import processing.data.TableRow;
 
 public class InfoVisProject extends PApplet {
 	
-	public static final String[] infoToDisplay = { "Population Total2007", 
-		  										   "Population Density2007", 
-												   "Life E-1pectancy2007", 
-												   "Energy Use Total2007", 
-												   "Murders Total Deaths2007", 
-												   "GDP Total2007" };
+	public static final String[] infoToDisplay = { "Population Total", 
+		  										   "Life Expectancy", 
+												   "Energy Use Total", 
+												   "Population Density",
+												   "Murders Total Deaths", 
+												   "GDP Total" };
 	
 	Data data;
 	
@@ -184,7 +184,7 @@ public class InfoVisProject extends PApplet {
 		for (TableRow tr : cont.rows())
 		{
 			pop = tr.getFloat(16);
-			println(tr.getString(1) + " : " + pop);
+			//println(tr.getString(1) + " : " + pop);
 			if (pop > 0)
 			{
 				degPays = pop * rat;

@@ -1,6 +1,5 @@
 package infovisproject;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,6 +12,9 @@ public class InformationPanel extends PGraphicsJava2D {
 	int width, height;
 	int informationNb;
 	
+	String[] info;
+	int[][] colors;
+	
 	LinkedHashMap<String, Float> data;
 	
 	public InformationPanel(CountryPanel cp, int width, int height, int informationNb) {
@@ -24,6 +26,24 @@ public class InformationPanel extends PGraphicsJava2D {
 		setSize(width, height);
 		
 		this.informationNb = informationNb;
+		
+		// information to display in a different order
+		String[] tmpInfo = InfoVisProject.infoToDisplay;
+		int[][] tmpColors = CountryPanel.colors;
+		int half = tmpInfo.length/2;
+		
+		info = new String[tmpInfo.length];
+		colors = new int[tmpColors.length][3];
+		
+		int newIndex = 0;
+		for(int index = 0; index < half; index++) {
+			info[newIndex] = tmpInfo[index];
+			colors[newIndex++] = tmpColors[index];
+			info[newIndex] = tmpInfo[index + half];
+			colors[newIndex++] = tmpColors[index + half];
+		}
+		
+		
 	}
 	
 	public void draw() {
@@ -44,17 +64,17 @@ public class InformationPanel extends PGraphicsJava2D {
 	
 	public void showInformation() {
 		textFont(countryPanel.loadFont());
+		textAlign(CENTER);
 		
-		int iterationCount = 0;
-		for(Map.Entry<String, Float> caracteristic: data.entrySet()) {
-			fill(color(CountryPanel.colors[iterationCount][0], CountryPanel.colors[iterationCount][1], CountryPanel.colors[iterationCount][2]));
+		for(int index = 0; index < info.length; index++) {
+			fill(color(colors[index][0], colors[index][1], colors[index][2]));
 		
-			//line(width/4, (height*(infoNb+1))/3 - height/6, (3*width)/4, (height*(infoNb+1))/3 - height/6);
-			float y = (height*(iterationCount+1))/(informationNb+1) - height/(informationNb*2);
-			textAlign(CENTER);
-			text(caracteristic.getKey() + " : ", width/2, y);
-			text(caracteristic.getValue(), width/2, y+35);
-			iterationCount++;
+			float y = (height*(index+1))/(informationNb+1) - height/(informationNb*2);
+
+			System.out.println(y);
+			text(info[index] + " : ", width/2, y);
+			text(data.get(info[index]).isNaN()?"No data":data.get(info[index]).toString(),
+				 width/2, y+35);
 		}
 		fill(255);
 	}
