@@ -18,7 +18,28 @@ public class Continent
 	String name;
 	
 	Color color;
-
+	
+	
+	public Continent(PApplet a, String name, ArrayList<Pays> payss)
+	{
+		app = a;
+		this.name = name;
+		pays = payss;
+		
+		color = Colors.getColor(name);
+	}
+	
+	public Continent(PApplet a, String name, int x, int y, int d)
+	{
+		app = a;
+		this.name = name;
+		cx = x;
+		cy = y;
+		this.d = d;
+		
+		color = Colors.getColor(name);
+	}
+	
 	public Continent(PApplet a, String name, int x, int y, int d, float start, float stop, ArrayList<Pays> payss)
 	{
 		app = a;
@@ -37,6 +58,48 @@ public class Continent
 		
 	}
 	
+	public float getPopulation()
+	{
+		float pop = 0;
+		for (Pays p : pays)
+			if (!Float.isNaN(p.population))
+				pop += p.population;
+		return pop;
+	}
+	
+	public void prepareContinent(int deg)
+	{
+		float rat = deg / getPopulation();
+		float degCurr = 0;
+		float degPays = 0;
+		
+		for (Pays p : pays)
+		{
+			degPays = p.population * rat;
+			p.start = degCurr;
+			p.stop = degPays + degCurr;
+			degCurr += degPays;
+		}
+	}
+	
+	public void prepareContinent(float start, float stop)
+	{
+		float rat = (stop-start) / getPopulation();
+		float degCurr = start;
+		float degPays;
+		app.println(start + " : " + stop);
+		for (Pays p : pays)
+		{
+			if (!Float.isNaN(p.population))
+			{
+				degPays = p.population* rat;
+				p.start = degCurr;
+				p.stop = degCurr + degPays;
+				degCurr += degPays;
+			}
+		}
+	}
+	
 	public void draw()
 	{	
 		app.strokeWeight(1);
@@ -50,6 +113,20 @@ public class Continent
 		app.fill(color.getRed(), color.getGreen(), color.getBlue(), opacite);
 		app.arc(cx, cy, d*2, d*2, start, stop, app.PIE);
 		app.fill(255);
+		if (Math.abs(stop-start) > 0.05)
+		{
+			float angle = (start + stop)/2;
+			float r = d/3;
+			float x = r * app.cos(angle) - app.textWidth(name)/2;
+			float y = r * app.sin(angle);
+			
+			if (name.equals("africa"))
+				app.fill(255);
+			else
+				app.fill(0);
+			app.text(name, cx+x, cy+y);
+			
+		}
 		app.strokeWeight(0.2f);
 		app.fill(255);
 	}

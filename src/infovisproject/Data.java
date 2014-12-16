@@ -50,6 +50,35 @@ public class Data
 		//data.clearRows();
 	}
 	
+	public ArrayList<Continent> storeData()
+	{
+		ArrayList<Continent> conts = new ArrayList<Continent>();
+		ArrayList<String> temp = new ArrayList<String>();
+		
+		for (TableRow tr : data.rows())
+		{
+			if (temp.contains(tr.getString(0)))
+			{
+				Pays n = new Pays(app, tr.getString(0), tr.getString(1), tr.getFloat(2), tr.getFloat(3), tr.getFloat(4), tr.getFloat(5), tr.getFloat(6), 
+						tr.getFloat(7), tr.getFloat(8), tr.getFloat(9), tr.getFloat(10), tr.getFloat(11), tr.getFloat(12), tr.getFloat(13), tr.getFloat(14), 
+						tr.getFloat(15), tr.getFloat(16), tr.getFloat(17), tr.getFloat(18));
+				conts.get(temp.indexOf(tr.getString(0))).pays.add(n);
+			}
+			else
+			{
+				conts.add(new Continent(app, tr.getString(0), new ArrayList<Pays>()));
+				temp.add(tr.getString(0));
+				Pays n = new Pays(app, tr.getString(0), tr.getString(1), tr.getFloat(2), tr.getFloat(3), tr.getFloat(4), tr.getFloat(5), tr.getFloat(6), 
+						tr.getFloat(7), tr.getFloat(8), tr.getFloat(9), tr.getFloat(10), tr.getFloat(11), tr.getFloat(12), tr.getFloat(13), tr.getFloat(14), 
+						tr.getFloat(15), tr.getFloat(16), tr.getFloat(17), tr.getFloat(18));
+				conts.get(temp.indexOf(tr.getString(0))).pays.add(n);
+			}
+		}
+		
+		return conts;
+	}
+
+	
 	public ArrayList<String> getContinents()
 	{
 		ArrayList<String> conts = new ArrayList<String>();

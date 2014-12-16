@@ -13,11 +13,53 @@ public class Pays
 	float start, stop;
 	
 	String continent, pays;
-	float population;
 	
+	float GDPAgri, GDPIndustry, GDPServices, childrenPerWoman, co2Emissions, democracy, energyUse, poverty125, GDPPerCapital, GDPTotal, HDI;
+	float lifeExpectancy, murders, density, population, poverty2, workingHours;
 	boolean mode;
 	
 	Color color;
+	
+	
+	
+	public Pays(PApplet app, String continent, String pays, float gDPAgri,
+			float gDPIndustry, float gDPServices, float childrenPerWoman,
+			float co2Emissions, float democracy, float energyUse,
+			float poverty125, float gDPPerCapital, float gDPTotal, float hDI,
+			float lifeExpectancy, float murders, float density,
+			float population, float poverty2, float workingHours) {
+		
+		this.app = app;
+		this.continent = continent;
+		this.pays = pays;
+		GDPAgri = gDPAgri;
+		GDPIndustry = gDPIndustry;
+		GDPServices = gDPServices;
+		this.childrenPerWoman = childrenPerWoman;
+		this.co2Emissions = co2Emissions;
+		this.democracy = democracy;
+		this.energyUse = energyUse;
+		this.poverty125 = poverty125;
+		GDPPerCapital = gDPPerCapital;
+		GDPTotal = gDPTotal;
+		HDI = hDI;
+		this.lifeExpectancy = lifeExpectancy;
+		this.murders = murders;
+		this.density = density;
+		this.population = population;
+		this.poverty2 = poverty2;
+		this.workingHours = workingHours;
+		
+		color = Colors.getColor(continent);
+	}
+
+	public Pays(PApplet a, String name, String continentName)
+	{
+		app = a;
+		this.pays = name;
+		continent = continentName;
+		color = Colors.getColor(continent);
+	}
 	
 	public Pays (PApplet a, int x, int y, int r1, float sta, float sto, String cont, String p, float po, boolean mode)
 	{
@@ -38,19 +80,38 @@ public class Pays
 		color = Colors.getColor(continent);
 	}
 	
-	public void draw()
+	public void draw(boolean contMode)
 	{
 		app.stroke(255);
 		app.strokeWeight(1f);
 		app.fill(color.getRed(), color.getGreen(), color.getBlue(), 200);
 		app.arc(cx, cy, r, r, start, stop, app.PIE);
+		if (Math.abs(stop-start) > 0.05)
+		{
+			float angle = (start + stop)/2;
+			float d;
+			if (contMode)
+				d = r /3;
+			else
+				d = r/3;
+			
+			float x = d * app.cos(angle) - app.textWidth(pays)/2;
+			float y = d * app.sin(angle);
+			
+			if (continent.equals("africa"))
+				app.fill(255);
+			else
+				app.fill(0);
+			app.text(pays, cx+x, cy+y);
+			
+		}
 		app.fill(255);
 		app.fill(255);
 	}
 	
 	public boolean mouseInside()
 	{	
-		return IsPointInsideArc(app.mouseX, app.mouseY, cx, cy, r, start, stop);
+		 return IsPointInsideArc(app.mouseX, app.mouseY, cx, cy, r, start, stop);
 	}
 	
 	boolean IsPointInsideArc(float pointX, float pointY, float centerX, float centerY, float diameter, float angle1, float angle2)

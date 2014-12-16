@@ -48,6 +48,8 @@ public class InfoVisProject extends PApplet {
 	float cpX = 0;
 	float cpY = 0;
 	
+	String titre = "World Population visualization";
+	
 	public void setup()
 	{
 		size(w, h);
@@ -66,6 +68,10 @@ public class InfoVisProject extends PApplet {
 	public void draw()
 	{
 		background(255);
+		fill(0);
+		textSize(24);
+		text(titre, cx-textWidth(titre)/2, 25);
+		textSize(18);
 		
 		if (selec == null) //Si on est en vue générale
 		{
@@ -75,7 +81,7 @@ public class InfoVisProject extends PApplet {
 			for (Continent c : conts)
 			{
 				for (Pays p : c.pays)
-					p.draw();
+					p.draw(true);
 				c.draw();
 			}
 			
@@ -121,7 +127,7 @@ public class InfoVisProject extends PApplet {
 			
 			strokeWeight(1);
 			for (Pays p : aCont)
-				p.draw();
+				p.draw(false);
 			strokeWeight(0.2f);
 			
 			drawMiddle();
@@ -252,9 +258,12 @@ public class InfoVisProject extends PApplet {
 	public void mouseInteraction(Pays a)
 	{
 		fill(0);
-		text(a.pays, cx-textWidth(a.pays)/2, cy);
+		text(a.pays, cx-textWidth(a.pays)/2, cy-60);
 		if (selec == null)
-			text(a.continent, cx-textWidth(a.continent)/2, cy + 30);
+			text(a.continent, cx-textWidth(a.continent)/2, cy - 40);
+		text("Population :", cx-textWidth("Population :")/2, cy);
+		text(a.population, cx - textWidth(""+a.population)/2, cy+20);
+		text((100*(a.population/data.getPop())) + " %", cx - textWidth(100*(a.population/data.getPop())+ " %")/2, cy + 60);
 		
 		// show country details on countryPanel
 		if(mousePressed) {
@@ -267,10 +276,11 @@ public class InfoVisProject extends PApplet {
 	public void mouseInteraction(Continent c)
 	{
 		fill(0);
-		text(c.name, cx-textWidth(c.name)/2, cy);
-		float pop = data.getPop(c.name);
-		text("Population : " + pop, cx-textWidth("Population : " + pop)/2, cy + 20);
-		text("% world pop. : " + (int)pop/data.getPop(), cx - textWidth("% world pop. : " + pop/data.getPop())/2, cy + 40);
+		text(c.name, cx-textWidth(c.name)/2, cy-40);
+		float pop = c.getPopulation();
+		text("Population :", cx-textWidth("Population :")/2, cy);
+		text(pop, cx-textWidth(""+pop)/2, cy + 20);
+		text((100*(pop/data.getPop())) + " %", cx - textWidth(100*(pop/data.getPop())+ " %")/2, cy + 60);
 		fill(255);
 		
 		if (mousePressed)
