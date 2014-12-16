@@ -32,6 +32,8 @@ public class InfoVisProject extends PApplet {
 	ArrayList<Continent> conts = new ArrayList<Continent>();
 	ArrayList<Pays> aCont = new ArrayList<Pays>();
 	
+	//Population totale
+	float popTotale;
 	
 	//Selection continent
 	Continent selec = null;
@@ -52,6 +54,7 @@ public class InfoVisProject extends PApplet {
 		smooth();
 		//Initialize data
 		data = new Data(this);
+		popTotale = data.getPop();
 		
 		cp = new CountryPanel(this, cpWidth, cpHeight);
 	}
@@ -108,6 +111,8 @@ public class InfoVisProject extends PApplet {
 			
 			if (degCurr < 360)
 				degCurr+= 40;
+			if (degCurr > 360)
+				degCurr = 360;
 		}
 		else //Vue focus sur un continent
 		{
@@ -131,8 +136,10 @@ public class InfoVisProject extends PApplet {
 			fill(255);
 			aCont.clear();
 			
-			if (degCurr < 360)
+			if (degCurr <= 360)
 				degCurr+= 30;
+			if (degCurr > 360)
+				degCurr = 360;
 			
 		}
 		
@@ -185,7 +192,7 @@ public class InfoVisProject extends PApplet {
 		{
 			pop = tr.getFloat(16);
 			//println(tr.getString(1) + " : " + pop);
-			if (pop > 0)
+			if (!Float.isNaN(pop))
 			{
 				degPays = pop * rat;
 				Pays a = new Pays (this, cx, cy, rPays, degCurr, degCurr + degPays, selec.name, tr.getString(1), pop, false);
@@ -261,6 +268,9 @@ public class InfoVisProject extends PApplet {
 	{
 		fill(0);
 		text(c.name, cx-textWidth(c.name)/2, cy);
+		float pop = data.getPop(c.name);
+		text("Population : " + pop, cx-textWidth("Population : " + pop)/2, cy + 20);
+		text("% world pop. : " + (int)pop/data.getPop(), cx - textWidth("% world pop. : " + pop/data.getPop())/2, cy + 40);
 		fill(255);
 		
 		if (mousePressed)

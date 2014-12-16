@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import jogamp.graph.font.typecast.ot.table.TTCHeader;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
@@ -99,6 +100,16 @@ public class Data
 		}
 		
 		return tm;
+	}
+	
+	//Renvoie pop d'un continent
+	public float getPop(String continent)
+	{
+		Table t = contsPays.get(continent);
+		float pop = 0;
+		for (TableRow tr : t.rows())
+			pop += tr.getFloat(16);
+		return pop;
 	}
 	
 	//Renvoie le nb de continents
