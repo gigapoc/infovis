@@ -37,7 +37,7 @@ public class CountryPanel extends PGraphicsJava2D {
 		
 		stroke(2);
 
-		graphWidth = (5*width)/6;
+		graphWidth = width;
 		cg = new WebGraph(this, graphWidth, InfoVisProject.infoToDisplay.length);
 		ip = new InformationPanel(this, graphWidth, height - (graphWidth+60), InfoVisProject.infoToDisplay.length);
 	}
@@ -47,20 +47,22 @@ public class CountryPanel extends PGraphicsJava2D {
 		beginDraw();
 		background(200);
 		
-		stroke(0);
-		strokeWeight(2);
-		line(width, 0, width, height);
-		
 		cg.draw();
-		image(cg, width/12, 20);
+		image(cg, 0, height/8);
 		
 		ip.draw();
-		image(ip, width/12, graphWidth + 40);
+		image(ip, 0, height/8 + graphWidth + 10);
 		
 		if(nameToDisplay != null) {
 			textFont(mainPanel.loadFont("LiberationSerif-40.vlw"));
-			text(nameToDisplay, 0, 30);
+			textAlign(CENTER);
+			text(nameToDisplay, width/2, height/12);
 		}
+		
+
+		stroke(0);
+		strokeWeight(2);
+		line(width, 0, width, height);
 		
 		endDraw();
 	}

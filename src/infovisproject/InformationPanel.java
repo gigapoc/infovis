@@ -42,8 +42,6 @@ public class InformationPanel extends PGraphicsJava2D {
 			info[newIndex] = tmpInfo[index + half];
 			colors[newIndex++] = tmpColors[index + half];
 		}
-		
-		
 	}
 	
 	public void draw() {
@@ -51,11 +49,11 @@ public class InformationPanel extends PGraphicsJava2D {
 		strokeWeight(2);
 		fill(200);
 		stroke(255);
-		rect(0, 0, width, height);
 		
 		if(data != null) { showInformation(); }
 		
 		endDraw();
+		clear();
 	}
 	
 	public void update(LinkedHashMap<String, Float> data) {
@@ -64,17 +62,19 @@ public class InformationPanel extends PGraphicsJava2D {
 	
 	public void showInformation() {
 		textFont(countryPanel.loadFont());
-		textAlign(CENTER);
 		
+		float y = 10;
 		for(int index = 0; index < info.length; index++) {
+			stroke(0);
 			fill(color(colors[index][0], colors[index][1], colors[index][2]));
-		
-			float y = (height*(index+1))/(informationNb+1) - height/(informationNb*2);
-
-			System.out.println(y);
-			text(info[index] + " : ", width/2, y);
-			text(data.get(info[index]).isNaN()?"No data":data.get(info[index]).toString(),
-				 width/2, y+35);
+			rect(10, y, 18, 18);
+			
+			fill(0);
+			String text = Data.normalizeData(info[index], data.get(info[index])); 
+			text(text, 40, y+16);
+			
+			y += 30;
+			if(index%2 != 0) { y += 30; }
 		}
 		fill(255);
 	}

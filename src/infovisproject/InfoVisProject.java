@@ -13,7 +13,7 @@ public class InfoVisProject extends PApplet {
 	
 	public static final String[] infoToDisplay = { "Population Total", 
 		  										   "Life Expectancy", 
-												   "Energy Use Total", 
+												   "Poverty headcount ratio at $2 a day (PPP) (% of population)", 
 												   "Population Density",
 												   "Murders Total Deaths", 
 												   "GDP Total" };
@@ -60,7 +60,7 @@ public class InfoVisProject extends PApplet {
 	}
 	
 	public PFont loadFont() {
-		return loadFont("DejaVuSans-20.vlw");
+		return loadFont("DejaVuSans-16.vlw");
 	}
 
 	public void draw()

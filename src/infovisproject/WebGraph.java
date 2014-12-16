@@ -101,6 +101,7 @@ public class WebGraph extends PGraphicsJava2D {
 		drawTriangles();
 		
 		endDraw();
+		clear();
 	}
 	
 	public void update(LinkedHashMap<String, Float> data) {

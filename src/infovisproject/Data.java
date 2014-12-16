@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import jogamp.graph.font.typecast.ot.table.TTCHeader;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
@@ -189,5 +188,69 @@ public class Data
 		}
 		
 		return caracteristics;
+	}
+	
+	static public String normalizeData(String categorie, float value) {
+		String s = Float.toString(value);
+		
+		if(Float.isNaN(value)) { s = "No data"; }
+		
+		if(categorie.equals(InfoVisProject.infoToDisplay[0])) {
+			System.out.println(Float.toString(value));
+			
+			if(!s.equals("No data")) {
+				if(s.charAt(s.length()-2) == 'E') {
+					int power = Integer.parseInt(s.substring(s.length()-1));
+					
+					switch(power) {
+					case 9 : s = s.substring(0, 5) + " billion"; break;
+					case 8 : s = s.substring(0, 1) + s.substring(2,4) + "." + s.substring(4,5) + " million"; break;
+					case 7 : s = s.substring(0, 1) + s.substring(2,3) + "." + s.substring(4,6) + " million"; break;
+					default : s = s.substring(0, 5) + " million";
+					}
+				} else if(s.length() > 6) { 
+					s = s.substring(0, 1) + "." + s.substring(1, 4) + " million";
+				}
+			}
+			
+			return categorie + " : " + s + " people";
+		}
+		else if(categorie.equals(InfoVisProject.infoToDisplay[1])) {
+			return categorie + " : " + s + " years";
+		}
+		else if(categorie.equals(InfoVisProject.infoToDisplay[2])) {
+			return "People under $2 a day : " + s + (s.equals("No data")?"":"%");
+		}
+		else if(categorie.equals(InfoVisProject.infoToDisplay[3])) {
+			return categorie + " : " + s + " people/km2";
+		}
+		else if(categorie.equals(InfoVisProject.infoToDisplay[4])) {
+			return categorie + " : " + s + " deaths/year";
+		}
+		else {
+			if(!s.equals("No data")) {
+				int power = 0;
+				
+				if(s.charAt(s.length()-3) == 'E') {
+					power = Integer.parseInt(s.substring(s.length()-2)); 
+				} else if (s.charAt(s.length()-2) == 'E') {
+					power = Integer.parseInt(s.substring(s.length()-1));
+				}
+				
+				switch(power) {
+				case 13 : s = s.substring(0, 1) + s.substring(2,3) + "." + s.substring(3, 5) + " trillion"; break;
+				case 12 : s = s.substring(0, 1) + "." + s.substring(2, 5) + " trillion"; break;
+				case 11 : s = s.substring(0, 1) + s.substring(2,4) + "." + s.substring(4, 5) + " billion"; break;
+				case 10 : s = s.substring(0, 1) + s.substring(2,3) + "." + s.substring(3, 5) + " billion"; break;
+				case 9  : s = s.substring(0, 5) + " billion"; break;
+				case 8  : s = s.substring(0, 1) + s.substring(2,4) + "." + s.substring(4,5) + " million"; break;
+				case 7  : s = s.substring(0, 1) + s.substring(2,3) + "." + s.substring(4,6) + " million"; break;
+				case 6  : s = s.substring(0, 5) + " million"; break;
+				default : s = s.substring(0, 1) + "." + s.substring(1, 4) + " million"; 
+				}
+			}
+			
+			return categorie + " : " + s;
+		}
 	}
 }
