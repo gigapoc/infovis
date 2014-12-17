@@ -102,7 +102,7 @@ public class Pays
 				app.fill(255);
 			else
 				app.fill(0);
-			app.text(pays, cx+x, cy+y);
+			app.text(Data.capitalize(pays), cx+x, cy+y);
 			
 		}
 		app.fill(255);

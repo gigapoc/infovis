@@ -228,18 +228,19 @@ public class Data
 			System.out.println(Float.toString(value));
 			
 			if(!s.equals("No data")) {
-				if(s.charAt(s.length()-2) == 'E') {
-					int power = Integer.parseInt(s.substring(s.length()-1));
+					int power = 0;
+					
+					if(s.charAt(s.length()-2) == 'E') {
+						power = Integer.parseInt(s.substring(s.length()-1));
+					}
 					
 					switch(power) {
 					case 9 : s = s.substring(0, 5) + " billion"; break;
 					case 8 : s = s.substring(0, 1) + s.substring(2,4) + "." + s.substring(4,5) + " million"; break;
 					case 7 : s = s.substring(0, 1) + s.substring(2,3) + "." + s.substring(4,6) + " million"; break;
-					default : s = s.substring(0, 5) + " million";
+					case 6 : s = s.substring(0, 5) + " million"; break;
+					default : s = s.substring(0, 6); 
 					}
-				} else if(s.length() > 6) { 
-					s = s.substring(0, 1) + "." + s.substring(1, 4) + " million";
-				}
 			}
 			
 			return categorie + " : " + s + " people";
@@ -275,11 +276,19 @@ public class Data
 				case 8  : s = s.substring(0, 1) + s.substring(2,4) + "." + s.substring(4,5) + " million"; break;
 				case 7  : s = s.substring(0, 1) + s.substring(2,3) + "." + s.substring(4,6) + " million"; break;
 				case 6  : s = s.substring(0, 5) + " million"; break;
-				default : s = s.substring(0, 1) + "." + s.substring(1, 4) + " million"; 
+				default : s = s.substring(0, 6); 
 				}
 			}
 			
 			return categorie + " : " + s;
 		}
+	}
+	
+	public static String capitalize(String toCap)
+	{
+		String cap = toCap.substring(0, 1);
+		cap = cap.toUpperCase();
+		cap += toCap.substring(1, toCap.length());
+		return cap;
 	}
 }

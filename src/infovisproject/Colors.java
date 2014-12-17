@@ -5,7 +5,7 @@ import java.awt.Color;
 public class Colors 
 {
 	//Jaune (Asie)
-	static Color j = new Color(255, 239, 8);
+	static Color j = new Color(247, 215, 8);
 	//Bleu (Europe)
 	static Color b = new Color(0,41,140);
 	//Noir (Afrique)

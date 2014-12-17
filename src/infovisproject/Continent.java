@@ -124,7 +124,7 @@ public class Continent
 				app.fill(255);
 			else
 				app.fill(0);
-			app.text(name, cx+x, cy+y);
+			app.text(Data.capitalize(name), cx+x, cy+y);
 			
 		}
 		app.strokeWeight(0.2f);
