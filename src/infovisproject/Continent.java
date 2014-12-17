@@ -3,6 +3,7 @@ package infovisproject;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.TreeMap;
 
 import processing.core.PApplet;
 
@@ -10,7 +11,7 @@ public class Continent
 {
 	PApplet app;
 	
-	ArrayList<Pays> pays;
+	TreeMap<Pays, Float> pays;
 	
 	int cx, cy;
 	int d;
@@ -20,7 +21,7 @@ public class Continent
 	Color color;
 	
 	
-	public Continent(PApplet a, String name, ArrayList<Pays> payss)
+	public Continent(PApplet a, String name, TreeMap<Pays, Float> payss)
 	{
 		app = a;
 		this.name = name;
@@ -37,14 +38,16 @@ public class Continent
 		cy = y;
 		this.d = d;
 		
+		pays = new TreeMap<Pays, Float>(new CountryComparator());
+		
 		color = Colors.getColor(name);
 	}
 	
-	public Continent(PApplet a, String name, int x, int y, int d, float start, float stop, ArrayList<Pays> payss)
+	public Continent(PApplet a, String name, int x, int y, int d, float start, float stop, TreeMap<Pays, Float> payss)
 	{
 		app = a;
 		
-		pays = new ArrayList<Pays>(payss);
+		pays = payss; // new TreeMap<Pays, Float>(payss);
 		this.start = app.radians(start);
 		this.stop = app.radians(stop);
 		this.d = d;
@@ -61,9 +64,9 @@ public class Continent
 	public float getPopulation()
 	{
 		float pop = 0;
-		for (Pays p : pays)
-			if (!Float.isNaN(p.population))
-				pop += p.population;
+		for (Float population: pays.values())
+			if (!Float.isNaN(population))
+				pop += population;
 		return pop;
 	}
 	
@@ -73,7 +76,7 @@ public class Continent
 		float degCurr = 0;
 		float degPays = 0;
 		
-		for (Pays p : pays)
+		for (Pays p : pays.keySet())
 		{
 			degPays = p.population * rat;
 			p.start = degCurr;
@@ -88,7 +91,7 @@ public class Continent
 		float degCurr = start;
 		float degPays;
 		app.println(start + " : " + stop);
-		for (Pays p : pays)
+		for (Pays p : pays.keySet())
 		{
 			if (!Float.isNaN(p.population))
 			{
@@ -133,16 +136,16 @@ public class Continent
 	
 	public void add(Pays p)
 	{
-		pays.add(p);
+		pays.put(p, p.population);
 	}
 	
 	
-	public void sortByPop()
+	/*public void sortByPop()
 	{
-		ArrayList<Pays> newList = new ArrayList<Pays>();
+		TreeMap<Pays, Float> newMap = new TreeMap<Pays, Float>();
 		ArrayList<Float> sorted = new ArrayList<Float>();
 		
-		for (Pays p : pays)
+		for (Pays p : pays.keySet())
 		{
 			sorted.add(p.population);
 		}
@@ -150,16 +153,16 @@ public class Continent
 		
 		for (Float f : sorted)
 		{
-			for (Pays p : pays)
+			for (Pays p : pays.keySet())
 				if (p.population == f)
 				{
-					newList.add(p);
+					newMap.put(p, p.population);
 					break;
 				}
 		}
 		pays.clear();
-		pays = newList;
-	}
+		pays = newMap;
+	}*/
 	
 	
 	public void setStart(float s) { start = s; }

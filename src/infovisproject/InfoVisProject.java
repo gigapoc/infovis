@@ -1,9 +1,11 @@
 package infovisproject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
-import controlP5.ControlEvent;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.data.Table;
@@ -31,7 +33,7 @@ public class InfoVisProject extends PApplet {
 	
 	//Arcs de cercle
 	public ArrayList<Continent> conts = new ArrayList<Continent>();
-	ArrayList<Pays> aCont = new ArrayList<Pays>();
+	TreeMap<Pays, Float> aCont = new TreeMap<Pays, Float>(new CountryComparator());
 	
 	//Selection continent
 	Continent selec = null;
@@ -70,6 +72,9 @@ public class InfoVisProject extends PApplet {
 		text("Number of people on earth (2007)" + data.normalizeData("", data.getPop()), cpWidth+10, h-20);
 		textSize(18);		
 		
+
+		float angle = 0;
+		
 		if (selec == null) //Si on est en vue générale
 		{
 			prepareCountries(degCurr);
@@ -77,8 +82,12 @@ public class InfoVisProject extends PApplet {
 			//Draw
 			for (Continent c : conts)
 			{
-				for (Pays p : c.pays)
+				for (Pays p : c.pays.keySet()) {
+					p.start = angle;
+					p.stop += angle;
 					p.draw(true);
+					angle = p.stop;
+				}
 				c.draw();
 			}
 			
@@ -87,7 +96,7 @@ public class InfoVisProject extends PApplet {
 			//Mouse interaction
 			for (Continent c: conts)
 			{
-				for (Pays p : c.pays)
+				for (Pays p : c.pays.keySet())
 					if (p.mouseInside())
 					{
 						mouseInteraction(p);
@@ -98,19 +107,6 @@ public class InfoVisProject extends PApplet {
 			
 			conts.clear();
 			
-
-			// testing purpose
-			/*int countryNb = 50;
-			java.util.LinkedHashMap<String, Float> data = new java.util.LinkedHashMap<String, Float>();
-			Table table = this.data.data;
-			String[] columnNames = { "Population Total2007", "Population Density2007", "Life E-1pectancy2007", "Energy Use Total2007", "Murders Total Deaths2007", "GDP Total2007" }; 
-			for(int index = 0; index < columnNames.length; index++) {
-				data.put(columnNames[index], table.getFloat(countryNb, columnNames[index]));
-			}
-			
-			cp.update(table.getString(countryNb, "Continent"), table.getString(countryNb, "Country"), this.data, data);
-			// end of test
-			*/
 			
 			if (degCurr < 360)
 				degCurr+= 40;
@@ -124,15 +120,19 @@ public class InfoVisProject extends PApplet {
 			prepareCont(degCurr);
 			
 			strokeWeight(1);
-			for (Pays p : aCont)
+			for (Pays p : aCont.keySet()) {
+				p.start = angle; 
+				p.stop += angle;
 				p.draw(false);
+				angle = p.stop;
+			}
 			strokeWeight(0.2f);
 			
 			drawMiddle();
 			
 			boolean interact = false;
 			//Mouse interaction
-			for (Pays p : aCont)
+			for (Pays p : aCont.keySet())
 				if (p.mouseInside())
 				{
 					mouseInteraction(p);
@@ -214,20 +214,22 @@ public class InfoVisProject extends PApplet {
 			if (!Float.isNaN(pop))
 			{
 				degPays = pop * rat;
-				Pays a = new Pays (this, cx, cy, rPays, degCurr, degCurr + degPays, selec.name, tr.getString(1), pop, false);
-				aCont.add(a);
+				Pays a = new Pays (this, cx, cy, rPays, degPays, selec.name, tr.getString(1), pop, false);
+				aCont.put(a, a.population);
 				degCurr += degPays;
 			}
 		}
 		
+
+		for(Pays p: aCont.keySet()) {
+			println(p.pays + " : " + p.population);
+		}
 	}
 /////////////// FIN SECTION VUE CONTINENT
 	
 /////////////// SECTION VUE GLOABALE
 	public void prepareCountries(int deg)
 	{
-		ArrayList<Pays> arcs = new ArrayList<Pays>();
-		
 		//Ratio :
 		float rat = deg/data.getPop();
 		float degCurr = 0;
@@ -241,26 +243,27 @@ public class InfoVisProject extends PApplet {
 		
 		for (Entry<String, Table> e : data.contsPays.entrySet())
 		{
+			TreeMap<Pays, Float> arcs = new TreeMap<Pays, Float>(new CountryComparator());
+			
 			for (TableRow tr : e.getValue().rows())
 			{
 				pop = tr.getFloat(16);
 				if (pop > 0)
 				{
 					degPays = pop * rat;
-					Pays a = new Pays(this, cx, cy, rPays, degCurr, degCurr+degPays, e.getKey(), tr.getString(1), pop, true);
-					arcs.add(a);
+					Pays a = new Pays(this, cx, cy, rPays, degPays, e.getKey(), tr.getString(1), pop, true);
+					arcs.put(a, pop);
 					degCurr += degPays;
 					degCont += degPays;
 				}
 			}
+			
 			Continent c = new Continent(this, e.getKey(), cx, cy, r, degCurrCont, degCurrCont + degCont, arcs);
 			//c.sortByPop();
 			conts.add(c);
 			
 			degCurrCont += degCont;
 			degCont = 0;
-			arcs.clear();
-			
 		}
 		
 	}
@@ -294,6 +297,7 @@ public class InfoVisProject extends PApplet {
 		fill(0);
 		text(Data.capitalize(c.name), cx-textWidth(c.name)/2, cy-40);
 		float pop = c.getPopulation();
+		System.out.println(pop);
 		//text("Population :", cx-textWidth("Population :")/2, cy);
 		text("Population" + data.normalizeData("", pop), cx - textWidth("Population" + data.normalizeData("", pop))/2, cy+10);
 		text((100*(pop/data.getPop())) + " %", cx - textWidth(100*(pop/data.getPop())+ " %")/2, cy + 60);
@@ -315,4 +319,4 @@ public class InfoVisProject extends PApplet {
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { infovisproject.InfoVisProject.class.getName() });
 	}
-}
+} 

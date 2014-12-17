@@ -62,16 +62,16 @@ public class Data
 				Pays n = new Pays(app, tr.getString(0), tr.getString(1), tr.getFloat(2), tr.getFloat(3), tr.getFloat(4), tr.getFloat(5), tr.getFloat(6), 
 						tr.getFloat(7), tr.getFloat(8), tr.getFloat(9), tr.getFloat(10), tr.getFloat(11), tr.getFloat(12), tr.getFloat(13), tr.getFloat(14), 
 						tr.getFloat(15), tr.getFloat(16), tr.getFloat(17), tr.getFloat(18));
-				conts.get(temp.indexOf(tr.getString(0))).pays.add(n);
+				conts.get(temp.indexOf(tr.getString(0))).pays.put(n, n.population);
 			}
 			else
 			{
-				conts.add(new Continent(app, tr.getString(0), new ArrayList<Pays>()));
+				conts.add(new Continent(app, tr.getString(0), new TreeMap<Pays, Float>(new CountryComparator())));
 				temp.add(tr.getString(0));
 				Pays n = new Pays(app, tr.getString(0), tr.getString(1), tr.getFloat(2), tr.getFloat(3), tr.getFloat(4), tr.getFloat(5), tr.getFloat(6), 
 						tr.getFloat(7), tr.getFloat(8), tr.getFloat(9), tr.getFloat(10), tr.getFloat(11), tr.getFloat(12), tr.getFloat(13), tr.getFloat(14), 
 						tr.getFloat(15), tr.getFloat(16), tr.getFloat(17), tr.getFloat(18));
-				conts.get(temp.indexOf(tr.getString(0))).pays.add(n);
+				conts.get(temp.indexOf(tr.getString(0))).pays.put(n, n.population);
 			}
 		}
 		

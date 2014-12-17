@@ -61,15 +61,15 @@ public class Pays
 		color = Colors.getColor(continent);
 	}
 	
-	public Pays (PApplet a, int x, int y, int r1, float sta, float sto, String cont, String p, float po, boolean mode)
+	public Pays (PApplet a, int x, int y, int r1, float stop, String cont, String p, float po, boolean mode)
 	{
 		app = a;
 		
 		cx = x;
 		cy = y;
 		r = r1;
-		start = app.radians(sta);
-		stop = app.radians(sto);
+		// start = app.radians(sta);
+		this.stop = app.radians(stop);
 		
 		continent = cont;
 		pays = p;
