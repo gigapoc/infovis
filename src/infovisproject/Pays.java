@@ -87,24 +87,32 @@ public class Pays
 		app.strokeWeight(1f);
 		app.fill(color.getRed(), color.getGreen(), color.getBlue(), 200);
 		app.arc(cx, cy, r, r, start, stop, app.PIE);
-		if (Math.abs(stop-start) > 0.04)
+		if (Math.abs(stop-start) > 0.03)
 		{
 			float angle = (start + stop)/2;
-			float d = r/3 + (angle * 20);
+			float d = r/3;
 			
-			float x = d * app.cos(angle) - app.textWidth(pays)/2;
-			float y = d * app.sin(angle);
+			float x = d * app.cos(angle);
+			float y = d * app.sin(angle) + 10;
 			
 			if (continent.equals("africa"))
 				app.fill(255);
 			else
 				app.fill(0);
 			
-			app.text(Data.capitalize(pays), (cx+x), (cy+y));
-			
-			
+			app.pushMatrix();
+			app.translate(cx+x, cy+y);
+			if (app.degrees(angle) > 90 && app.degrees(angle) < 180)
+				app.rotate(angle+app.PI);
+			else if (app.degrees(angle) > 180 && app.degrees(angle) < 270)
+				app.rotate(angle-app.PI);
+			else
+				app.rotate(angle);
+			app.textAlign(app.CENTER);
+			app.text(Data.capitalize(pays), 0, 0);
+			app.textAlign(app.LEFT);
+			app.popMatrix();
 		}
-		app.fill(255);
 		app.fill(255);
 	}
 	
