@@ -53,10 +53,15 @@ public class CountryPanel extends PGraphicsJava2D {
 		ip.draw();
 		image(ip, 0, height/8 + graphWidth + 10);
 		
+		textAlign(LEFT);
+		textSize(12);
+		text("Data compare to continent's", 5, 14);
+		
 		if(nameToDisplay != null) {
-			textFont(mainPanel.loadFont("LiberationSerif-40.vlw"));
+			//textFont(mainPanel.loadFont("LiberationSerif-40.vlw"));
+			textSize(30);
 			textAlign(CENTER);
-			text(nameToDisplay, width/2, height/12);
+			text(Data.capitalize(nameToDisplay), width/2, height/12);
 		}
 		
 
