@@ -99,11 +99,9 @@ public class Pays
 				app.fill(255);
 			else
 				app.fill(0);
-			app.pushMatrix();
-			app.translate(cx, cy);
-			app.rotate(angle);
-			app.text(Data.capitalize(pays), (cx+x)/2, (cy+y)/2);
-			app.popMatrix();
+			
+			app.text(Data.capitalize(pays), (cx+x), (cy+y));
+			
 			
 		}
 		app.fill(255);
