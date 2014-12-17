@@ -25,6 +25,8 @@ public class CountryPanel extends PGraphicsJava2D {
 	WebGraph cg;
 	InformationPanel ip;
 	
+	int backgroundColor;
+	
 	public CountryPanel(InfoVisProject mainPanel, int width, int height) {
 		super();
 		
@@ -35,17 +37,17 @@ public class CountryPanel extends PGraphicsJava2D {
 		setParent(mainPanel);
 		setSize(width, height);
 		
-		stroke(2);
-
+		backgroundColor = mainPanel.color(100);
+			
 		graphWidth = width;
-		cg = new WebGraph(this, graphWidth, InfoVisProject.infoToDisplay.length);
+		cg = new WebGraph(this, backgroundColor, graphWidth, InfoVisProject.infoToDisplay.length);
 		ip = new InformationPanel(this, graphWidth, height - (graphWidth+60), InfoVisProject.infoToDisplay.length);
 	}
 	
 	public void draw() {
 		// backgrounds elements
 		beginDraw();
-		background(200);
+		background(backgroundColor);
 		
 		cg.draw();
 		image(cg, 0, height/8);
@@ -55,6 +57,7 @@ public class CountryPanel extends PGraphicsJava2D {
 		
 		textAlign(LEFT);
 		textSize(12);
+		fill(255);
 		text("Data compare to continent's", 5, 14);
 		
 		if(nameToDisplay != null) {

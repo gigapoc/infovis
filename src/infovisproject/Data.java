@@ -225,8 +225,6 @@ public class Data
 		if(Float.isNaN(value)) { s = "No data"; }
 		
 		if(categorie.equals(InfoVisProject.infoToDisplay[0])) {
-			System.out.println(Float.toString(value));
-			
 			if(!s.equals("No data")) {
 					int power = 0;
 					

@@ -65,11 +65,11 @@ public class InformationPanel extends PGraphicsJava2D {
 		
 		float y = 10;
 		for(int index = 0; index < info.length; index++) {
-			stroke(0);
+			stroke(150);
 			fill(color(colors[index][0], colors[index][1], colors[index][2]));
 			rect(10, y, 18, 18);
 			
-			fill(0);
+			fill(255);
 			String text = Data.normalizeData(info[index], data.get(info[index])); 
 			text(text, 40, y+16);
 			

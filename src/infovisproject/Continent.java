@@ -90,7 +90,7 @@ public class Continent
 		float rat = (stop-start) / getPopulation();
 		float degCurr = start;
 		float degPays;
-		app.println(start + " : " + stop);
+		//app.println(start + " : " + stop);
 		for (Pays p : pays.keySet())
 		{
 			if (!Float.isNaN(p.population))

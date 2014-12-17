@@ -222,7 +222,7 @@ public class InfoVisProject extends PApplet {
 		
 
 		for(Pays p: aCont.keySet()) {
-			println(p.pays + " : " + p.population);
+			//println(p.pays + " : " + p.population);
 		}
 	}
 /////////////// FIN SECTION VUE CONTINENT
@@ -278,7 +278,7 @@ public class InfoVisProject extends PApplet {
 		if (selec == null)
 			text(Data.capitalize(a.continent), cx-textWidth(a.continent)/2, cy - 40);
 		//text("Population :", cx-textWidth("Population :")/2, cy);
-		println(a.population);
+		//println(a.population);
 		//textSize(14);
 		text("Population" +data.normalizeData("", a.population), cx - textWidth("Population"+data.normalizeData("", a.population))/2, cy+10);
 		//textSize(18);
@@ -297,7 +297,7 @@ public class InfoVisProject extends PApplet {
 		fill(0);
 		text(Data.capitalize(c.name), cx-textWidth(c.name)/2, cy-40);
 		float pop = c.getPopulation();
-		System.out.println(pop);
+		//System.out.println(pop);
 		//text("Population :", cx-textWidth("Population :")/2, cy);
 		text("Population" + data.normalizeData("", pop), cx - textWidth("Population" + data.normalizeData("", pop))/2, cy+10);
 		text((100*(pop/data.getPop())) + " %", cx - textWidth(100*(pop/data.getPop())+ " %")/2, cy + 60);

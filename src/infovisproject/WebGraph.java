@@ -22,13 +22,17 @@ public class WebGraph extends PGraphicsJava2D {
 	float[] min;
 	LinkedHashMap<String, Float> data;
 	
-	public WebGraph(PGraphics parent, int width, int branchNumber) {
+	int backgroundColor;
+	
+	public WebGraph(PGraphics parent, int bc, int width, int branchNumber) {
 		this.parent = parent;
 		this.width = width;
 		this.branchNumber = (branchNumber<3)?3:branchNumber;
 		this.triangles = new Triangle[branchNumber];
 		this.max = new float[branchNumber];
 		this.min = new float[branchNumber];
+		
+		backgroundColor = bc;
 		
 		// to remove, for debuging purpose	
 		/*addTriangle(0, 0, -100, (float) Math.cos(PI/6)*55, (float) Math.sin(PI/6)*55, CountryPanel.colors[0], CountryPanel.colors[1]);
@@ -85,7 +89,7 @@ public class WebGraph extends PGraphicsJava2D {
 	
 	public void draw() {
 		beginDraw();
-		background(200);
+		background(backgroundColor);
 		/*stroke(0);
 		ellipse(width/2, height/2, width, height);*/
 		
