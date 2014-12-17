@@ -1,6 +1,7 @@
 package infovisproject;
 
 import java.awt.Color;
+import java.util.Random;
 
 import processing.core.PApplet;
 
@@ -86,14 +87,10 @@ public class Pays
 		app.strokeWeight(1f);
 		app.fill(color.getRed(), color.getGreen(), color.getBlue(), 200);
 		app.arc(cx, cy, r, r, start, stop, app.PIE);
-		if (Math.abs(stop-start) > 0.05)
+		if (Math.abs(stop-start) > 0.04)
 		{
 			float angle = (start + stop)/2;
-			float d;
-			if (contMode)
-				d = r /3;
-			else
-				d = r/3;
+			float d = r/3 + (angle * 20);
 			
 			float x = d * app.cos(angle) - app.textWidth(pays)/2;
 			float y = d * app.sin(angle);
@@ -102,7 +99,11 @@ public class Pays
 				app.fill(255);
 			else
 				app.fill(0);
-			app.text(Data.capitalize(pays), cx+x, cy+y);
+			app.pushMatrix();
+			app.translate(cx, cy);
+			app.rotate(angle);
+			app.text(Data.capitalize(pays), (cx+x)/2, (cy+y)/2);
+			app.popMatrix();
 			
 		}
 		app.fill(255);
