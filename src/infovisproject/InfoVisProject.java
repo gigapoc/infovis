@@ -1,8 +1,6 @@
 package infovisproject;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -55,6 +53,8 @@ public class InfoVisProject extends PApplet {
 		size(w, h);
 		//Initialize data
 		data = new Data(this);
+		
+		smooth();
 		
 		cp = new CountryPanel(this, cpWidth, cpHeight);
 	}

@@ -3,7 +3,6 @@ package infovisproject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import processing.core.PApplet;

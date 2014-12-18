@@ -1,7 +1,6 @@
 package infovisproject;
 
 import java.awt.Color;
-import java.util.Random;
 
 import processing.core.PApplet;
 

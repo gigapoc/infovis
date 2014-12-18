@@ -11,12 +11,12 @@ public class CountryPanel extends PGraphicsJava2D {
 	
 	InfoVisProject mainPanel;
 	
-	public static final int[][] colors = { {255, 0, 0}, 
-										   {0, 255, 0}, 
-										   {0, 0, 255},
-										   {255, 255, 0},
-										   {0, 255, 255},
-										   {255, 0, 255} };
+	public static final int[][] colors = { {0x5A, 0xAA, 0xFA}, 
+										   {0xFF, 0x78, 0x32}, 
+										   {0x00, 0xB4, 0xA0},
+										   {0xAF, 0x6E, 0xE8},
+										   {0xE7, 0x1D, 0x32},
+										   {0x8C, 0xD2, 0x11}			    };
 	
 	
 	String nameToDisplay;

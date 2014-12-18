@@ -1,8 +1,6 @@
 package infovisproject;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.TreeMap;
 
 import processing.core.PApplet;
@@ -90,7 +88,7 @@ public class Continent
 		float rat = (stop-start) / getPopulation();
 		float degCurr = start;
 		float degPays;
-		//app.println(start + " : " + stop);
+		
 		for (Pays p : pays.keySet())
 		{
 			if (!Float.isNaN(p.population))
@@ -109,27 +107,25 @@ public class Continent
 		app.stroke(0);
 		app.arc(cx, cy, d, d, start, stop, app.PIE);
 		
-		//app.strokeWeight(1);
 		int opacite = Colors.opacite;
 		if (mouseInside())
 			opacite = Colors.opaciteHover;
 		app.fill(color.getRed(), color.getGreen(), color.getBlue(), opacite);
 		app.arc(cx, cy, d*2, d*2, start, stop, app.PIE);
 		app.fill(255);
-		if (Math.abs(stop-start) > 0.05)
-		{
-			float angle = (start + stop)/2;
-			float r = d/3;
-			float x = r * app.cos(angle) - app.textWidth(name)/2;
-			float y = r * app.sin(angle);
-			
-			if (name.equals("africa"))
-				app.fill(255);
-			else
-				app.fill(0);
-			app.text(Data.capitalize(name), cx+x, cy+y);
-			
-		}
+
+		float angle = (start + stop)/2;
+		float r = d/3;
+		float x = r * app.cos(angle) - app.textWidth(name)/2;
+		float y = r * app.sin(angle)+5;
+		
+		if (name.equals("africa"))
+			app.fill(255);
+		else
+			app.fill(0);
+		
+		app.text(Data.capitalize(name), cx+x, cy+y);
+		
 		app.strokeWeight(0.2f);
 		app.fill(255);
 	}
